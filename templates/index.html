@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fake News Detector</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+        body {
+            background-color: #f7f9fc;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            max-width: 700px;
+            width: 100%;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        form textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            resize: vertical;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        form textarea:focus {
+            outline: none;
+            border-color: #0056b3;
+            box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
+        }
+        form input[type="submit"] {
+            display: block;
+            width: 100%;
+            background-color: #0056b3;
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        form input[type="submit"]:hover {
+            background-color: #003d80;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 10px;
+            background: #e9f0ff;
+            border: 1px solid #a3bffa;
+        }
+        .result h3 {
+            margin-top: 0;
+            font-weight: 700;
+            color: #000;
+        }
+        .result .fake {
+            color: #d9534f;
+            font-weight: 700;
+        }
+        .result .real {
+            color: #5cb85c;
+            font-weight: 700;
+        }
+        .result p {
+            font-size: 16px;
+            line-height: 1.4;
+            color: #333;
+            margin: 8px 0;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+            padding: 8px 12px;
+            border-radius: 5px;
+            color: #856404;
+            margin-top: 15px;
+            font-weight: 700;
+        }
+        ul.reason-list {
+            margin-left: 18px;
+            margin-bottom: 12px;
+        }
+        ul.reason-list li {
+            color: #d9534f;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Fake News Detector</h2>
+    <p>Enter news text below to check if it is Fake or Real.</p>
+    <form method="post" id="newsForm">
+        <textarea name="news_text" placeholder="Paste news text here..." required autofocus>{% if request.method == 'POST' %}{{ request.form['news_text'] }}{% endif %}</textarea>
+        <input type="submit" value="Check News">
+    </form>
+
+    {% if result %}
+    <div class="result">
+        {% if result == "Please enter some news text." %}
+            <p class="warning">{{ result }}</p>
+        {% else %}
+            <h3>Prediction:
+                <span class="{{ result.label|lower }}">{{ result.label }}</span>
+            </h3>
+            <p><b>Confidence:</b> {{ result.confidence }}</p>
+            <p><b>Sentiment Polarity:</b> {{ result.polarity }} (Negative = -1, Positive = +1)</p>
+            <p><b>Sentiment Subjectivity:</b> {{ result.subjectivity }} (Factual = 0, Opinionated = 1)</p>
+            {% if result.reason and result.label == 'Fake' %}
+                <p><b>Why is this news predicted as Fake?</b></p>
+                <ul class="reason-list">
+                    {% for r in result.reason %}
+                        <li>{{ r }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+</body>
+</html>
