@@ -1,0 +1,17 @@
+# Python cache files
+__pycache__/
+*.pyc
+
+# PyCharm / IDE files
+.idea/
+
+# Large files (models, CSVs) - optional if using Git LFS
+*.pkl
+*.csv
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
