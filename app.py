@@ -11,7 +11,7 @@ from threading import Timer
 app = Flask(__name__)
 
 # Load trained pipeline model
-text_clf = joblib.load('fake_news_best_model.pkl')
+text_clf = joblib.load('models/fake_news_best_model.pkl')
 
 lemma = WordNetLemmatizer()
 stopwords_set = set(stopwords.words('english'))
