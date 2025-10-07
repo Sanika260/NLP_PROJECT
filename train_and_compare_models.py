@@ -40,8 +40,8 @@ def clean_text(text):
 # --------------------------
 # Load and prepare dataset
 # --------------------------
-fake = pd.read_csv('Fake.csv')
-true = pd.read_csv('True.csv')
+fake = pd.read_csv('data/Fake.csv')
+true = pd.read_csv('data/True.csv')
 
 fake['category'] = 1
 true['category'] = 0
